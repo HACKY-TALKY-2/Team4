@@ -2,11 +2,14 @@ import { PrismaClient } from "@prisma/client";
 import express from "express";
 import gameRouter from "./router/game.js";
 import leaderboardRouter from "./router/leaderboard.js";
+import bodyParser from "body-parser";
 
 export const prisma = new PrismaClient();
 
 // create an object of the express module
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, }),);
 
 // root 경로에 접근 시 다음 callback 함수 호출
 app.get("/", (req, res) => {
