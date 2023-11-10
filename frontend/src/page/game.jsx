@@ -81,27 +81,28 @@ function Game() {
         });
         console.log(response.data);
         const game2= response.data;
-        
+        if (game2.) {
+          alert('정답입니다!');
+          setCount((prevCount) => prevCount + 1);
+    
+          if (game2.goToNewRound) {
+            alert('다음 라운드로 이동!');
+            setScore(data.round);
+            setRound((prevRound) => prevRound + 1);
+            setCount(0);
+          }     
+        }
+        else {
+          alert('오답입니다!');
+          setRealTimeCount((prevCount) => Math.max(0, prevCount - 5));
+        } 
       } catch (error) {
         console.error(error);
       }
-    }
-    if (isCorrect) {
-      alert('정답입니다!');
-      setCount((prevCount) => prevCount + 1);
+    }  
+      postData();
 
-      if (game2.goToNewRound) {
-        alert('다음 라운드로 이동!');
-        setScore(data.round);
-        setRound((prevRound) => prevRound + 1);
-        setCount(0);
-      }     
-    }
-    else {
-      alert('오답입니다!');
-      setRealTimeCount((prevCount) => Math.max(0, prevCount - 5));
-    } 
-    postData();
+
   };
 
   const renderProblem = () => {
