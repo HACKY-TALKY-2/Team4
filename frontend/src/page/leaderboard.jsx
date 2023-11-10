@@ -3,6 +3,7 @@ import '../App.css';
 import reactLogo from '../assets/react.svg';
 import viteLogo from '/vite.svg';
 import React, { Component } from 'react';
+import './leaderboard.css';
 
 function Leaderboard() {
   const rankers = [
@@ -54,9 +55,9 @@ return (
   <div className="leaderboard">
     {rankers.map((ranker, index) => (
       <ul>
-        {index}&nbsp;
-        ID : {ranker.name} &nbsp;
-        {ranker.date} &nbsp;
+      <p>{index} &nbsp;
+      User : {ranker.name} &nbsp;
+      {ranker.date} </p>
         ROUND : {ranker.round} &nbsp;
         {ranker.duration} &nbsp;
       </ul>
