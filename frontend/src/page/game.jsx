@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import './game.css';
 import axios from 'axios'; 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { redirect } from 'react-router-dom';
 
 function Game() {
   const storedId = localStorage.getItem('id');
@@ -30,14 +33,19 @@ function Game() {
     const timerInterval = setInterval(() => {
       setRealTimeCount(prevCount => {
         if (prevCount > 0) {
-          return prevCount - 1;
+          return prevCount - 0.1;
         } else {
+           axios.post('https://y3y-back.up.railway.app/game/guess', {
+          id: game.id,
+          guess: "TimeOut",
+        });
           clearInterval(timerInterval);
-          alert('시간 초과로 Game Over!');
+          alert('시간 초과로 인해 Time Over!');
+          redirect("/leaderboard");
           return 0;
         }
       });
-    }, 1000);
+    }, 100);
 
     return () => clearInterval(timerInterval);
   }, [count]);
@@ -72,6 +80,20 @@ function Game() {
     }
   };
 
+  async function postNewRound() {
+    try {
+      const response = await axios.post('https://y3y-back.up.railway.app/game/create', {
+        id: game.id,
+        name: name,
+      });
+      console.log(response.data);
+      setProblem(response.data.problem);
+      setGame(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const checkAnswer = () => {
     async function postData() {
       try {
@@ -81,15 +103,16 @@ function Game() {
         });
         console.log(response.data);
         const game2= response.data;
-        if (game2.) {
+        if (game2.isCorrect) {
           alert('정답입니다!');
           setCount((prevCount) => prevCount + 1);
     
           if (game2.goToNewRound) {
             alert('다음 라운드로 이동!');
-            setScore(data.round);
-            setRound((prevRound) => prevRound + 1);
-            setCount(0);
+            setScore(game2.round);
+            setRound((prevRound) => prevRound + 1); 
+            setRealTimeCount(30);
+            await postNewRound();
           }     
         }
         else {
@@ -133,7 +156,7 @@ function Game() {
       <div>
         {name ? (
           <>
-            <div className="timer"> {realTimeCount} </div>
+            <div className="timer"> {realTimeCount.toFixed(1)} </div>
   
             <div className="round">{round}라운드</div>
             <div className="score">점수 : {score}</div>
