@@ -5,6 +5,7 @@ import './index.css';
 import Game from './page/game.jsx';
 import Leaderboard from './page/leaderboard.jsx';
 import Main from './page/home.jsx';
+import Help from './page/help.jsx';
 
 const router = createBrowserRouter([
     {
@@ -18,7 +19,11 @@ const router = createBrowserRouter([
     {
         path: "/leaderboard",
         element: <Leaderboard />,
-    }
+    },
+    {
+      path: "/help",
+      element: <Help />,
+  }
   ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
