@@ -19,7 +19,7 @@ router.post("/create", async (req, res) => {
             roundNum: game.rounds.length + 1,
             problems: problem.map(el => [el, 0]),
             answers: answer,
-            time: new Date(Date.now() + 15 * 1000)
+            time: new Date(Date.now() + 30 * 1000)
         }
     });
     res.json({
@@ -37,17 +37,19 @@ router.post("/guess", async (req, res) => {
         res.status(400).send("Bad Request");
         return;
     }
-    const game = await prisma.game.findUnique({ where: { id: id }, include: { rounds: true } });
+    const game = await prisma.game.findUnique({
+        where: { id: id }, include: { rounds: { orderBy: { roundNum: 'asc', }, } }
+    });
     if (!game) {
         res.status(404).send("Not Found");
         return;
     }
     const lastRound = game.rounds[game.rounds.length - 1];
-    const isCorrect = lastRound.answers.includes(guess);
+    const isCorrect = lastRound.answers.some(answer => answer === guess);
     let newRound;
     if (isCorrect) {
         let problems = lastRound.problems;
-        const answerNum = Math.max(lastRound.problems.map(el => el[1])) + 1;
+        const answerNum = Math.max(...lastRound.problems.map(el => el[1])) + 1;
         for (const iterator of guess) {
             const index = problems.findIndex(el => (el[1] === 0) && (el[0] === iterator));
             problems[index] = [iterator, answerNum];
@@ -66,7 +68,7 @@ router.post("/guess", async (req, res) => {
     }
     const time = Date.now();
     const isTimeout = time > newRound.time;
-    const getAllAnswer = Math.max(newRound.problems.every(el => el[1])) === 3;
+    const getAllAnswer = Math.max(...newRound.problems.map(el => el[1])) === 3;
     res.json({
         id: game.id,
         round: newRound.roundNum,
