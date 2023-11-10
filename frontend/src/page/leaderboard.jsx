@@ -1,12 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../App.css';
 import reactLogo from '../assets/react.svg';
 import viteLogo from '/vite.svg';
 import React, { Component } from 'react';
 import './leaderboard.css';
+import axios from 'axios';
 
 function Leaderboard() {
-  const rankers = [
+  const[rankers, setRankers] = useState([]);
+  useEffect(()=>{
+    async function getData() {
+      try {
+        //응답 성공
+        const response = await axios.get('https://y3y-back.up.railway.app/leaderboard');
+        console.log(response.data);
+        setRankers(response.data);
+      } catch (error) {
+        //응답 실패
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
+  /*const rankers = [
     {
       name:"8",
       date:"2023-11-10",
@@ -49,7 +65,7 @@ function Leaderboard() {
       round:1,
       duration:"0분 34초",
     }, 
-]
+]*/
 
 return (
   <div className="leaderboard">
