@@ -26,4 +26,4 @@ const handleListen = () => {
 };
 
 // make the server listen on port 3000
-app.listen(process.env.PORt || PORT, handleListen);
+app.listen(process.env.PORT || PORT, handleListen);
