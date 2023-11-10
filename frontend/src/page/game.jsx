@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
-import './game.css';
-import axios from 'axios'; 
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { redirect } from 'react-router-dom';
+import './game.css';
 
 function Game() {
   const storedId = localStorage.getItem('id');
