@@ -4,6 +4,8 @@ import { makeQuiz } from "../util.js";
 
 const router = Router();
 
+const TIME = 30;
+
 router.post("/create", async (req, res) => {
     const id = req.body.id;
     const name = req.body.name;
@@ -12,22 +14,41 @@ router.post("/create", async (req, res) => {
         return;
     }
     const { problem, answer } = makeQuiz();
-    const game = await prisma.game.create({ data: { name: name }, include: { rounds: true } });
-    const round = await prisma.round.create({
-        data: {
-            gameId: game.id,
-            roundNum: game.rounds.length + 1,
-            problems: problem.map(el => [el, 0]),
-            answers: answer,
-            time: new Date(Date.now() + 30 * 1000)
-        }
-    });
-    res.json({
-        id: game.id,
-        round: round.roundNum,
-        problem: round.problems,
-        time: round.time
-    });
+    if (id) {
+        const game = await prisma.game.findUnique({ where: { id: id }, });
+        const round = await prisma.round.create({
+            data: {
+                gameId: game.id,
+                roundNum: game.rounds.length + 1,
+                problems: problem.map(el => [el, 0]),
+                answers: answer,
+                time: new Date(Date.now() + TIME * 1000)
+            }
+        });
+        res.json({
+            id: game.id,
+            round: round.roundNum,
+            problem: round.problems,
+            time: round.time
+        });
+    } else {
+        const game = await prisma.game.create({ data: { name: name }, include: { rounds: true } });
+        const round = await prisma.round.create({
+            data: {
+                gameId: game.id,
+                roundNum: game.rounds.length + 1,
+                problems: problem.map(el => [el, 0]),
+                answers: answer,
+                time: new Date(Date.now() + TIME * 1000)
+            }
+        });
+        res.json({
+            id: game.id,
+            round: round.roundNum,
+            problem: round.problems,
+            time: round.time
+        });
+    }
 });
 
 router.post("/guess", async (req, res) => {
