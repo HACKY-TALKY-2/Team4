@@ -49,7 +49,7 @@ router.post("/guess", async (req, res) => {
         let problems = lastRound.problems;
         const answerNum = Math.max(lastRound.problems.map(el => el[1])) + 1;
         for (const iterator of guess) {
-            const index = problems.findIndex(el => el[1] === 0 && el[0] === iterator);
+            const index = problems.findIndex(el => (el[1] === 0) && (el[0] === iterator));
             problems[index] = [iterator, answerNum];
         }
         newRound = await prisma.round.update({
