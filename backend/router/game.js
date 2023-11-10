@@ -96,7 +96,8 @@ router.post("/guess", async (req, res) => {
         problem: newRound.problems,
         time: newRound.time,
         isGameOver: isTimeout,
-        goToNewRound: !isTimeout && getAllAnswer
+        goToNewRound: !isTimeout && getAllAnswer,
+        isCorrect: isCorrect
     });
     if (isTimeout) {
         await prisma.game.update({
