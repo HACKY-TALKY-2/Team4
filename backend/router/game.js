@@ -17,7 +17,7 @@ router.post("/create", async (req, res) => {
         data: {
             gameId: game.id,
             roundNum: game.rounds.length + 1,
-            problems: problem,
+            problems: problem.map(el => [el, 0]),
             answers: answer,
             time: Date.now() + 15 * 1000
         }
@@ -31,12 +31,57 @@ router.post("/create", async (req, res) => {
 });
 
 router.post("/guess", async (req, res) => {
-    res.send("Hello, Game!");
-});
+    const id = req.body.id;
+    const guess = req.body.guess;
+    if (!id || !guess) {
+        res.status(400).send("Bad Request");
+        return;
+    }
+    const game = await prisma.game.findUnique({ where: { id: id }, include: { rounds: true } });
+    if (!game) {
+        res.status(404).send("Not Found");
+        return;
+    }
+    const lastRound = game.rounds[game.rounds.length - 1];
+    const isCorrect = lastRound.answers.includes(guess);
+    let newRound;
+    if (isCorrect) {
+        let problems = lastRound.problems;
+        const answerNum = Math.max(lastRound.problems.map(el => el[1])) + 1;
+        for (const iterator of guess) {
+            const index = problems.findIndex(el => el[1] === 0 && el[0] === iterator);
+            problems[index] = [iterator, answerNum];
+        }
+        newRound = await prisma.round.update({
+            where: { id: lastRound.id },
+            data: { problems }
+        });
+    } else {
+        newRound = await prisma.round.update({
+            where: { id: lastRound.id },
+            data: {
+                time: lastRound.time - 5 * 1000
+            }
+        });
+    }
+    const time = Date.now();
+    const isTimeout = time > newRound.time;
+    const getAllAnswer = Math.max(newRound.problems.every(el => el[1])) === 3;
+    res.json({
+        id: game.id,
+        round: newRound.roundNum,
+        problem: newRound.problems,
+        time: newRound.time,
+        isGameOver: isTimeout,
+        goToNewRound: !isTimeout && getAllAnswer
+    });
+    if (isGameOver) {
+        await prisma.game.update({
+            where: { id: game.id },
+            data: { finishedAt: newRound.time }
+        });
 
-router.post("/register", async (req, res) => {
-    res.send("Hello, Game!");
+    }
 });
-
 
 export default router;
