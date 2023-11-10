@@ -81,7 +81,7 @@ function Game() {
         });
         console.log(response.data);
         const game2= response.data;
-        if (game2.) {
+        if (game2.isCorrect) {
           alert('정답입니다!');
           setCount((prevCount) => prevCount + 1);
     

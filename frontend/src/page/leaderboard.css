@@ -51,3 +51,24 @@
     font-weight: bold; /* 순위 글자 굵게 */
   }
   
+  .home-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 40px 40px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/2385/2385488.png'); /* 이미지 경로 추가 */
+    background-size: contain; /* 이미지가 버튼 크기에 맞게 조정되도록 설정 */
+    background-position: center; /* 이미지가 버튼 중앙에 위치하도록 설정 */
+}
+
+.home-button:hover {
+    background-color: #e0e0e0;
+}
+
+.backspace{
+    margin-top: 0px;
+}

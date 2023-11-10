@@ -101,6 +101,8 @@ return (
       </ul>
     ))}
   </div>}
+  <a href="/" className="home-button"></a>
+  <div className="backspace">뒤로가기</div>
   </>
 );
 
