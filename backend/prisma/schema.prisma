@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id         String    @id @default(uuid())
+  rounds     Round[]
+  name       String?
+  createdAt  DateTime  @default(now())
+  finishedAt DateTime?
+}
+
+model Round {
+  id       String   @id @default(uuid())
+  game     Game     @relation(fields: [gameId], references: [id])
+  gameId   String
+  roundNum Int
+  problems Json // 복합 타입 [string, number][]를 JSON으로 저장
+  answers  Json
+  time     DateTime
+}
