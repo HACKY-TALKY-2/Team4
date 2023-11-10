@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
             }
             // round 수가 같으면 duration으로 정렬
             return a.durationMs - b.durationMs;
-        }).slice(0, 10).map((game) => {return {...game, durationMs:undefined}});
+        }).slice(0, 9).map((game) => {return {...game, durationMs:undefined}});
 
         res.json(formattedGames);
     } catch (error) {
