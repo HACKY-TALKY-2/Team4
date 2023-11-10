@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+import bodyParser from "body-parser";
 import express from "express";
 import gameRouter from "./router/game.js";
 import leaderboardRouter from "./router/leaderboard.js";
-import bodyParser from "body-parser";
 
 export const prisma = new PrismaClient();
 
@@ -26,4 +26,4 @@ const handleListen = () => {
 };
 
 // make the server listen on port 3000
-app.listen(PORT, handleListen);
+app.listen(process.env.PORt || PORT, handleListen);
