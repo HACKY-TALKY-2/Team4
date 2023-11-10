@@ -24,7 +24,10 @@
     
     display: flex;
   }
- 
+ .timer{
+    font-family: 'Black Han Sans', sans-serif;
+    margin-bottom: 30px;
+ }
 .round,
 .score{
     font-family: 'Black Han Sans', sans-serif;
