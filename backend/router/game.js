@@ -4,7 +4,7 @@ import { makeQuiz } from "../util.js";
 
 const router = Router();
 
-const TIME = 30;
+const TIME = 150;
 
 router.post("/create", async (req, res) => {
     const id = req.body.id;
@@ -15,7 +15,7 @@ router.post("/create", async (req, res) => {
     }
     const { problem, answer } = makeQuiz();
     if (id) {
-        const game = await prisma.game.findUnique({ where: { id: id }, });
+        const game = await prisma.game.findUnique({ where: { id: id }, include: { rounds: true } });
         const round = await prisma.round.create({
             data: {
                 gameId: game.id,
