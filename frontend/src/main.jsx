@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     {
       path: "/help",
       element: <Help />,
-  }
+    }
   ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
