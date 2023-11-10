@@ -5,6 +5,6 @@ import { defineConfig } from 'vite';
 export default defineConfig({
     plugins: [react()],
     server: {
-        port: import.meta.env.PORT,
+        port: import.meta.env.VITE_PORT,
     },
 });
