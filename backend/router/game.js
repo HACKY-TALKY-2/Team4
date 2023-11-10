@@ -19,7 +19,7 @@ router.post("/create", async (req, res) => {
             roundNum: game.rounds.length + 1,
             problems: problem.map(el => [el, 0]),
             answers: answer,
-            time: Date.now() + 15 * 1000
+            time: new Date(Date.now() + 15 * 1000)
         }
     });
     res.json({
@@ -60,7 +60,7 @@ router.post("/guess", async (req, res) => {
         newRound = await prisma.round.update({
             where: { id: lastRound.id },
             data: {
-                time: lastRound.time - 5 * 1000
+                time: new Date(lastRound.time.getTime() - 5 * 1000)
             }
         });
     }
