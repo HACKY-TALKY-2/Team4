@@ -12,7 +12,7 @@ router.post("/create", async (req, res) => {
         return;
     }
     const { problem, answer } = makeQuiz();
-    const game = await prisma.game.create({ data: {}, include: { rounds: true } });
+    const game = await prisma.game.create({ data: { name: name }, include: { rounds: true } });
     const round = await prisma.round.create({
         data: {
             gameId: game.id,
@@ -75,12 +75,11 @@ router.post("/guess", async (req, res) => {
         isGameOver: isTimeout,
         goToNewRound: !isTimeout && getAllAnswer
     });
-    if (isGameOver) {
+    if (isTimeout) {
         await prisma.game.update({
             where: { id: game.id },
             data: { finishedAt: newRound.time }
         });
-
     }
 });
 
