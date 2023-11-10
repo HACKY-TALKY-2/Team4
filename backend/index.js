@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bodyParser from "body-parser";
+import cors from "cors";
 import express from "express";
 import gameRouter from "./router/game.js";
 import leaderboardRouter from "./router/leaderboard.js";
@@ -8,6 +9,15 @@ export const prisma = new PrismaClient();
 
 // create an object of the express module
 const app = express();
+app.use(cors(
+    {
+        origin: [
+            'http://localhost:5173', // for frontend in development
+            'https://y3y.up.railway.app', // for frontend in production
+        ],
+        credentials: true,
+    }
+));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, }),);
 
