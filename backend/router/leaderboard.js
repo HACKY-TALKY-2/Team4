@@ -29,7 +29,8 @@ router.get("/", async (req, res) => {
                 name: game.name,
                 date: date,
                 round: game.rounds.length,
-                duration: `${minutes}분 ${seconds}초` // 분과 초 형태의 문자열
+                duration: `${minutes}분 ${seconds}초`, // 분과 초 형태의 문자열
+                durationMs: durationMs
             };
         }).sort((a, b) => {
             // 먼저 round 수에 따라 정렬
@@ -37,8 +38,8 @@ router.get("/", async (req, res) => {
                 return b.round - a.round;
             }
             // round 수가 같으면 duration으로 정렬
-            return (a.duration || 0) - (b.duration || 0);
-        }).slice(0, 10);
+            return a.durationMs - b.durationMs;
+        }).slice(0, 10).map((game) => {return {...game, durationMs:undefined}});
 
         res.json(formattedGames);
     } catch (error) {
